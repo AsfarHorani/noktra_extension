@@ -1,0 +1,47 @@
+.jd-gate {
+  background: #fff;
+  border: 1px solid #e1e0d9;
+  border-radius: 6px;
+  padding: 14px;
+}
+
+.jd-gate-message {
+  font-size: 13px;
+  color: #52514e;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.jd-gate textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.jd-gate .primary-button {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #2a78d6;
+  color: #fff;
+}
+
+.jd-gate .primary-button:disabled {
+  background: #93b4f0;
+  cursor: default;
+}
+
+.jd-gate .error-message {
+  color: #d03b3b;
+  font-size: 12px;
+  margin-top: 8px;
+}

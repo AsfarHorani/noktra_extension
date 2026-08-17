@@ -1,0 +1,6 @@
+{
+  "url": "https://jobs.fraunhofer.de/search/?q=software",
+  "category": "negative-listing-path-regression",
+  "note": "The exact real example CLAUDE.md's LISTING_PATH_SEGMENTS section documents. Title 'Software - Stellen bei Fraunhofer-Gesellschaft' would match GENERIC_TITLE_SEPARATORS' ' - ' and get read as a single bogus job posting without the /search path gate.",
+  "expectDetected": false
+}

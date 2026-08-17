@@ -1,0 +1,13 @@
+<div class="jd-gate">
+  <p class="jd-gate-message">
+    This job doesn't have a description on file yet — nothing to actually engage with, so generating from here
+    would just produce something generic. Paste the job description below first.
+  </p>
+  <textarea #jdInput rows="8" placeholder="Paste the full job description here…"></textarea>
+  @if (error()) {
+    <p class="error-message">{{ error() }}</p>
+  }
+  <button type="button" class="primary-button" [disabled]="busy()" (click)="save()">
+    {{ busy() ? 'Saving…' : 'Save & Continue' }}
+  </button>
+</div>

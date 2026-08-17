@@ -1,0 +1,142 @@
+.panel {
+  border: 1px solid #e1e0d9;
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 8px;
+  background: #fcfcfb;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.panel-header h3 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.close-button {
+  border: none;
+  background: none;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  color: #898781;
+}
+
+.hint {
+  font-size: 12px;
+  color: #898781;
+  margin: 0 0 10px;
+}
+
+.saved-hint {
+  color: #0ca30c;
+  font-weight: 600;
+}
+
+.field-label {
+  display: block;
+  font-size: 12px;
+  color: #52514e;
+  margin-bottom: 4px;
+}
+
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.primary-button {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #2a78d6;
+  color: #fff;
+}
+
+.primary-button:disabled {
+  background: #93b4f0;
+  cursor: default;
+}
+
+.error-message {
+  color: #d03b3b;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.result {
+  margin-top: 12px;
+  background: #fff;
+  line-height: 1.5;
+}
+
+.result-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.result-actions button {
+  padding: 6px 12px;
+  border: 1px solid #d0d0d0;
+  background: #fff;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.result-actions button:disabled {
+  color: #b3b1ab;
+  cursor: default;
+}
+
+.empty-profile-block {
+  background: #fff;
+  border: 1px solid #e1e0d9;
+  border-radius: 6px;
+  padding: 14px;
+}
+
+.empty-profile-block p {
+  font-size: 13px;
+  color: #52514e;
+  margin: 0 0 8px;
+}
+
+/* Status-warning tone, same role stats-flow.ts's status colors use
+   elsewhere in the dashboard — a real "pay attention before acting" signal,
+   not decoration. */
+.ai-warning {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  background: #fdf3e0;
+  border: 1px solid #f0d99a;
+  border-radius: 4px;
+  color: #8a5a00;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.review-confirm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #33322f;
+  cursor: pointer;
+}

@@ -1,0 +1,7 @@
+{
+  "url": "https://job-boards.greenhouse.io/anthropic/jobs/4017331008",
+  "category": "positive-generic-fallback",
+  "note": "No JobPosting JSON-LD on this Greenhouse board template. <title> follows 'Job Application for {title} at {company}' (would exercise the ' at ' separator), but extractGenericFallback() prefers og:title, which this page sets to a clean 'Research Engineer, Knowledge Team' with no separator at all — confirmed by running this fixture, not assumed. So this actually exercises the 'og:title with no separator match, keep it whole' path and the '/job' GENERIC_JOB_PATH_SEGMENTS gate, not the ' at ' split.",
+  "expectDetected": true,
+  "expectedJobTitle": "Research Engineer, Knowledge Team"
+}

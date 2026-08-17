@@ -1,0 +1,404 @@
+/* Vibrant redesign (was a flat, muted earth-tone theme) — user feedback:
+   the dashboard read as "boring" next to competitor UIs like Huntr, which
+   lean into bold color and a playful kanban board. A violet/indigo brand
+   accent replaces the old flat blue throughout (sidebar, buttons, active
+   states, focus rings); per-status colors are untouched (still
+   constants.ts's STATUS_COLORS, the dataviz-skill-validated palette) since
+   those encode real meaning and aren't just decoration — the redesign adds
+   vibrancy around that data, it doesn't recolor the data itself. */
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #201a33;
+  background: #f7f6fc;
+
+  --accent: #7c3aed;
+  --accent-dark: #5b21b6;
+  --accent-gradient: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  --accent-soft: #f1ecfd;
+  --accent-soft-border: #e2d9fa;
+}
+
+/* Never needed one before this — every other conditional bit of this
+   template uses structural @if/@switch, not class-toggling. The auth
+   form's Confirm Password field is the one exception: it has to stay
+   physically in the DOM in every mode (see app.html's comment on why),
+   so hiding it needs an actual class instead. */
+.hidden {
+  display: none !important;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+  width: 224px;
+  flex-shrink: 0;
+  background: #fff;
+  border-right: 1px solid #ece9f7;
+  box-shadow: 1px 0 0 rgba(124, 58, 237, 0.03);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 14px;
+  box-sizing: border-box;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 6px;
+  margin-bottom: 26px;
+}
+
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: var(--accent-gradient);
+  box-shadow: 0 3px 8px rgba(109, 40, 217, 0.35);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #5f5a78;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.nav-item:hover {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.nav-item.active {
+  background: var(--accent-gradient);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(109, 40, 217, 0.28);
+}
+
+.nav-icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+
+.nav-item.active .nav-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.nav-dot {
+  margin-left: auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #0ca30c;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid #ece9f7;
+}
+
+/* ---------- Content ---------- */
+
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: 32px 40px;
+  overflow-x: auto;
+}
+
+.page {
+  max-width: 900px;
+}
+
+.page h1 {
+  font-size: 23px;
+  margin: 0 0 4px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #1c1630;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: #8b86a3;
+  margin: 0 0 20px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Board/List toggle on the Jobs page — a small segmented control, same
+   visual language as the rest of the accent system. */
+.view-toggle {
+  display: flex;
+  background: #f1ecfd;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.view-toggle button {
+  padding: 6px 12px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #7c76a0;
+  cursor: pointer;
+}
+
+.view-toggle button.active {
+  background: #fff;
+  color: var(--accent-dark);
+  box-shadow: 0 1px 4px rgba(109, 40, 217, 0.18);
+}
+
+/* ---------- Overview stat tiles ---------- */
+
+.stat-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 24px;
+}
+
+.stat-tile {
+  background: #fff;
+  border: 1px solid #ece9f7;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 1px 3px rgba(35, 20, 90, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--tile-color, var(--accent));
+}
+
+.stat-tile-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--tile-color, var(--accent)) 14%, #fff);
+  color: var(--tile-color, var(--accent));
+  margin-bottom: 10px;
+}
+
+.stat-tile-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.stat-tile-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1c1630;
+  line-height: 1;
+}
+
+.stat-tile-label {
+  font-size: 11.5px;
+  color: #8b86a3;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.stat-tile-total {
+  --tile-color: #7c3aed;
+}
+
+.stat-tile-active {
+  --tile-color: #3987e5;
+}
+
+.stat-tile-interview {
+  --tile-color: #1c5cab;
+}
+
+.stat-tile-offer {
+  --tile-color: #0ca30c;
+}
+
+.form-panel {
+  background: #fff;
+  border: 1px solid #ece9f7;
+  border-radius: 12px;
+  padding: 18px;
+  margin: 16px 0;
+  box-shadow: 0 2px 8px rgba(35, 20, 90, 0.06);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  transition: filter 0.12s ease, box-shadow 0.12s ease;
+}
+
+.primary-button {
+  background: var(--accent-gradient);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(109, 40, 217, 0.28);
+}
+
+.primary-button:hover {
+  filter: brightness(1.06);
+}
+
+.danger-button {
+  width: 100%;
+  background: none;
+  color: #d0316b;
+  border: 1px solid #f3c9dc;
+}
+
+.danger-button:hover {
+  background: #fbe3ec;
+}
+
+.logout-button {
+  width: 100%;
+  margin-top: 8px;
+  background: none;
+  color: #5f5a78;
+  border: 1px solid #e2ddf2;
+}
+
+.logout-button:hover {
+  background: #f4f2fc;
+}
+
+/* ---------- Auth gate ---------- */
+/* Shown instead of .layout entirely until auth.isLoggedIn() is true — see
+   app.ts's checkAuth()/submitAuthForm(). Every tracked application now
+   lives on the Django server behind a real account. */
+.auth-gate {
+  max-width: 340px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.auth-gate .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.field-label {
+  display: block;
+  font-size: 12px;
+  color: #5f5a78;
+  margin: 10px 0 4px;
+}
+
+.field-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 7px 9px;
+  border: 1px solid #d9d5ee;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.auth-error {
+  color: #d0316b;
+  font-size: 12px;
+  margin: 8px 0 0;
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.auth-gate .link-button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 12px;
+  text-align: center;
+  padding: 4px;
+}

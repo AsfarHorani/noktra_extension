@@ -1,0 +1,59 @@
+<form (submit)="onSubmit($event)">
+  <div class="grid">
+    <label>
+      Job Title *
+      <input #jobTitleInput type="text" [value]="defaults().jobTitle" required />
+    </label>
+    <label>
+      Company *
+      <input #companyInput type="text" [value]="defaults().company" required />
+    </label>
+    <label>
+      Location
+      <input #locationInput type="text" [value]="defaults().location" />
+    </label>
+    <label>
+      Job URL
+      <input #jobUrlInput type="url" [value]="defaults().jobUrl" placeholder="https://..." />
+    </label>
+    <label>
+      Employment Type
+      <select #employmentTypeInput [value]="defaults().employmentType">
+        <option value="">—</option>
+        <option value="Full-time">Full-time</option>
+        <option value="Part-time">Part-time</option>
+        <option value="Contract">Contract</option>
+        <option value="Internship">Internship</option>
+      </select>
+    </label>
+    <label>
+      Status
+      <select #statusInput [value]="defaults().status">
+        @for (s of statuses; track s) {
+          <option [value]="s">{{ s }}</option>
+        }
+      </select>
+    </label>
+    <label>
+      Application Date
+      <input #applicationDateInput type="date" [value]="defaults().applicationDate" />
+    </label>
+    <label class="full-width">
+      Job Description
+      <textarea
+        #jobDescriptionInput
+        rows="4"
+        placeholder="Auto-filled when the site provides one; paste it here otherwise — used for cover letter and interview-answer generation."
+        [value]="defaults().jobDescription"
+      ></textarea>
+    </label>
+    <label class="full-width">
+      Notes
+      <textarea #notesInput rows="3" [value]="defaults().notes"></textarea>
+    </label>
+  </div>
+  <div class="form-actions">
+    <button type="submit">{{ editing() ? 'Update Application' : 'Save Application' }}</button>
+    <button type="button" class="secondary" (click)="cancel.emit()">Cancel</button>
+  </div>
+</form>

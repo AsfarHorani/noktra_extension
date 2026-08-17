@@ -1,0 +1,223 @@
+@if (auth.isLoggedIn() === false) {
+  <div class="auth-gate">
+    <div class="brand">
+      <span class="brand-mark">JT</span>
+      <span class="brand-name">Job Tracker</span>
+    </div>
+    <p class="page-subtitle">Sign in to sync your tracked applications. Requires the local server running at <code>localhost:8000</code>.</p>
+
+    <form
+      #authForm
+      (submit)="$event.preventDefault(); submitAuthForm(authEmail.value, authPassword.value, authConfirmPassword.value)"
+    >
+      <label class="field-label">Email</label>
+      <input #authEmail type="email" class="field-input" required autocomplete="username" />
+
+      <label class="field-label">Password</label>
+      <input
+        #authPassword
+        type="password"
+        class="field-input"
+        required
+        [attr.autocomplete]="authMode() === 'signup' ? 'new-password' : 'current-password'"
+      />
+
+      <!--
+        Always in the DOM (never behind @if) — a template ref declared
+        inside an @if block is scoped to that block, and this form's
+        (submit) handler on the outer <form> needs to reference
+        authConfirmPassword.value regardless of mode. Hidden via
+        [class.hidden] and only actually required in signup mode instead.
+      -->
+      <label class="field-label" [class.hidden]="authMode() === 'login'">Confirm Password</label>
+      <input
+        #authConfirmPassword
+        type="password"
+        class="field-input"
+        [class.hidden]="authMode() === 'login'"
+        [attr.required]="authMode() === 'signup' ? true : null"
+        autocomplete="new-password"
+      />
+
+      @if (authError()) {
+        <p class="auth-error">{{ authError() }}</p>
+      }
+
+      <button type="submit" class="primary-button auth-submit" [disabled]="authBusy()">
+        {{ authBusy() ? 'Working…' : (authMode() === 'login' ? 'Log In' : 'Sign Up') }}
+      </button>
+      <button type="button" class="link-button" (click)="toggleAuthMode()">
+        {{ authMode() === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Log in' }}
+      </button>
+    </form>
+  </div>
+} @else if (auth.isLoggedIn()) {
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">JT</span>
+      <span class="brand-name">Job Tracker</span>
+    </div>
+
+    <nav class="nav">
+      <button type="button" class="nav-item" [class.active]="activePage() === 'overview'" (click)="setPage('overview')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="20" x2="4" y2="12" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="20" y1="20" x2="20" y2="16" />
+        </svg>
+        <span>Overview</span>
+      </button>
+
+      <button type="button" class="nav-item" [class.active]="activePage() === 'jobs'" (click)="setPage('jobs')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="7" width="18" height="13" rx="2" />
+          <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+        </svg>
+        <span>Jobs</span>
+        @if (applications().length) {
+          <span class="nav-badge">{{ applications().length }}</span>
+        }
+      </button>
+
+      <button type="button" class="nav-item" [class.active]="activePage() === 'profile'" (click)="setPage('profile')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 21c0-4 4-6 8-6s8 2 8 6" />
+        </svg>
+        <span>Profile</span>
+        @if (profile()?.resumeFileName) {
+          <span class="nav-dot" title="Profile set up"></span>
+        }
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button type="button" class="danger-button" (click)="onClearAll()">Clear All</button>
+      <button type="button" class="logout-button" (click)="logout()">Log Out</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    @switch (activePage()) {
+      @case ('overview') {
+        <section class="page">
+          <h1>Overview</h1>
+          <p class="page-subtitle">Your job search, at a glance.</p>
+
+          <div class="stat-tiles">
+            <div class="stat-tile stat-tile-total">
+              <div class="stat-tile-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="7" width="18" height="13" rx="2" />
+                  <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+              </div>
+              <div class="stat-tile-value">{{ applications().length }}</div>
+              <div class="stat-tile-label">Total Tracked</div>
+            </div>
+
+            <div class="stat-tile stat-tile-active">
+              <div class="stat-tile-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 3" />
+                </svg>
+              </div>
+              <div class="stat-tile-value">{{ activeCount() }}</div>
+              <div class="stat-tile-label">Active</div>
+            </div>
+
+            <div class="stat-tile stat-tile-interview">
+              <div class="stat-tile-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+              </div>
+              <div class="stat-tile-value">{{ interviewCount() }}</div>
+              <div class="stat-tile-label">Interviewing</div>
+            </div>
+
+            <div class="stat-tile stat-tile-offer">
+              <div class="stat-tile-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2l2.9 6.3 6.9.9-5 4.8 1.2 6.8-6-3.3-6 3.3 1.2-6.8-5-4.8 6.9-.9z" />
+                </svg>
+              </div>
+              <div class="stat-tile-value">{{ offerCount() }}</div>
+              <div class="stat-tile-label">Offers</div>
+            </div>
+          </div>
+
+          <app-stats-flow [applications]="applications()" />
+        </section>
+      }
+
+      @case ('jobs') {
+        <section class="page">
+          <div class="page-header">
+            <h1>Jobs</h1>
+            <div class="page-header-actions">
+              <div class="view-toggle">
+                <button type="button" [class.active]="jobsView() === 'board'" (click)="setJobsView('board')">Board</button>
+                <button type="button" [class.active]="jobsView() === 'list'" (click)="setJobsView('list')">List</button>
+              </div>
+              <button type="button" class="primary-button" (click)="openAddForm()">+ Add Application</button>
+            </div>
+          </div>
+
+          @if (formOpen()) {
+            <div class="form-panel">
+              <app-application-form [editing]="editingApp()" (save)="onSave($event)" (cancel)="closeForm()" />
+            </div>
+          }
+
+          @if (jobsView() === 'board') {
+            <app-application-board
+              [applications]="applications()"
+              (edit)="openEditForm($event)"
+              (statusChange)="onStatusChange($event)"
+              (remove)="onDelete($event)"
+              (coverLetter)="openCoverLetter($event)"
+              (prepAnswers)="openPrepAnswers($event)"
+            />
+          } @else {
+            <app-application-list
+              [applications]="applications()"
+              (edit)="openEditForm($event)"
+              (statusChange)="onStatusChange($event)"
+              (remove)="onDelete($event)"
+              (coverLetter)="openCoverLetter($event)"
+              (prepAnswers)="openPrepAnswers($event)"
+            />
+          }
+
+          @if (assistantMode() === 'cover-letter' && assistantApp(); as app) {
+            <app-cover-letter-panel
+              [application]="app"
+              [profile]="profile()"
+              (close)="closeAssistantPanel()"
+              (goToProfile)="goToProfileFromAssistant()"
+            />
+          }
+          @if (assistantMode() === 'prep-answers' && assistantApp(); as app) {
+            <app-interview-answers-panel [application]="app" [profile]="profile()" (close)="closeAssistantPanel()" />
+          }
+        </section>
+      }
+
+      @case ('profile') {
+        <section class="page">
+          <div class="page-header">
+            <h1>Profile</h1>
+            <app-resume-upload />
+          </div>
+          <p class="page-subtitle">Used to generate tailored cover letters and interview answers on the Jobs page — nothing here ever leaves your machine except as text sent to your local Ollama.</p>
+          <app-profile-view />
+        </section>
+      }
+    }
+  </main>
+</div>
+}

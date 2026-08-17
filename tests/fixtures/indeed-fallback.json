@@ -1,0 +1,9 @@
+{
+  "url": "https://www.indeed.com/viewjob?jk=a5bbf90bfa91c3d9",
+  "category": "positive-indeed-fallback",
+  "note": "Hand-built minimal fixture using real, live-confirmed data-testid selectors and values (Indeed blocks automated full-page fetches) — see comment in indeed-fallback.html.",
+  "expectDetected": true,
+  "expectedJobTitle": "Software Engineer",
+  "expectedCompany": "Decilog",
+  "expectedJobDescriptionSubstring": "responsible for designing and maintaining backend services"
+}

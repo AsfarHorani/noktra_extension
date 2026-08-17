@@ -1,0 +1,48 @@
+<div class="panel">
+  <div class="panel-header">
+    <h3>Cover Letter — {{ application().jobTitle }} at {{ application().company }}</h3>
+    <button type="button" class="close-button" (click)="close.emit()">&times;</button>
+  </div>
+
+  @if (profileEmpty()) {
+    <div class="empty-profile-block">
+      <p>Your profile is empty, so there's nothing real to write a cover letter from.</p>
+      <p>Upload a resume or fill in your details on the Profile page first, then come back here to generate one.</p>
+      <button type="button" class="primary-button" (click)="goToProfile.emit()">Set Up Profile</button>
+    </div>
+  } @else if (jobDescriptionMissing()) {
+    <app-job-description-gate [applicationId]="application().id" (saved)="onDescriptionSaved($event)" />
+  } @else {
+    @if (result() && !busy()) {
+      <p class="hint saved-hint">Saved ✓ — shown below. Generate again only if you want a new version (e.g. after adding notes).</p>
+    }
+
+    <label class="field-label">Anything you'd like included? (optional — interests, a skills match, your current status, etc.)</label>
+    <textarea #notesInput rows="3" placeholder="e.g. I'm currently finishing a certification in..."></textarea>
+
+    <button type="button" class="primary-button" [disabled]="busy()" (click)="generate()">
+      {{ busy() ? 'Generating…' : result() ? 'Regenerate Cover Letter' : 'Generate Cover Letter' }}
+    </button>
+
+    @if (error()) {
+      <p class="error-message">{{ error() }}</p>
+    }
+
+    @if (result()) {
+      <textarea class="result" rows="14" readonly>{{ result() }}</textarea>
+
+      <p class="ai-warning">⚠️ AI-generated text can contain mistakes or inaccuracies — read the whole letter
+        carefully and make sure everything in it is true and aligned with your actual background before you send it.</p>
+
+      <label class="review-confirm">
+        <input type="checkbox" [checked]="reviewed()" (change)="reviewed.set(!reviewed())" />
+        I've read this letter and confirm it's accurate
+      </label>
+
+      <div class="result-actions">
+        <button type="button" [disabled]="!reviewed()" (click)="copy()">{{ copied() ? 'Copied ✓' : 'Copy' }}</button>
+        <button type="button" [disabled]="!reviewed()" (click)="download()">Download .txt</button>
+      </div>
+    }
+  }
+</div>

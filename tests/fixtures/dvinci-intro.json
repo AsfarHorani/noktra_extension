@@ -1,0 +1,7 @@
+{
+  "url": "https://budenheim.dvinci-hr.com/de/jobs/50597/intro",
+  "category": "positive-dvinci-fallback-regression",
+  "note": "The specific bug documented in CLAUDE.md's d.vinci fallback section: this step's <title>/og:title is garbled ('Auswahl der Bewerbungsart für...'), which is exactly why extractDvinciFallback() reads the first <h1> instead — confirmed here to still be the real job title on this step, live.",
+  "expectDetected": true,
+  "expectedJobTitle": "Industriemechaniker Instandhaltung"
+}

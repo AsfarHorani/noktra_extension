@@ -1,0 +1,31 @@
+.hidden-file-input {
+  display: none;
+}
+
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #2a78d6;
+  color: #fff;
+}
+
+button:disabled {
+  background: #93b4f0;
+  cursor: default;
+}
+
+.status-message {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #52514e;
+}
+
+.error-message {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #d03b3b;
+}

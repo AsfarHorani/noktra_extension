@@ -1,0 +1,8 @@
+{
+  "url": "https://www.linkedin.com/jobs/view/4443873277/",
+  "category": "positive-linkedin-fallback",
+  "note": "Hand-built minimal fixture reflecting the real logged-in page structure (confirmed live via an authenticated session while building this suite) — see comment in linkedin-fallback.html for why, including a real finding: the logged-out title format doesn't match extractLinkedInFallback()'s regex at all.",
+  "expectDetected": true,
+  "expectedJobTitle": "Team Lead Software Engineering",
+  "expectedCompany": "Codewerk"
+}

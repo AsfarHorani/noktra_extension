@@ -1,0 +1,69 @@
+<div class="board" cdkDropListGroup>
+  @for (col of columns(); track col.status) {
+    <div class="board-column">
+      <div class="board-column-header" [style.--col-color]="col.color">
+        <span class="board-column-dot"></span>
+        <span class="board-column-title">{{ col.status }}</span>
+        <span class="board-column-count">{{ col.apps.length }}</span>
+      </div>
+
+      <div
+        class="board-column-body"
+        cdkDropList
+        [id]="dropId(col.status)"
+        [cdkDropListData]="col.apps"
+        [cdkDropListConnectedTo]="dropListIds"
+        (cdkDropListDropped)="onDrop($event, col.status)"
+      >
+        @for (app of col.apps; track app.id) {
+          <div class="board-card" cdkDrag [cdkDragData]="app" [style.--col-color]="col.color">
+            <div class="board-card-title">{{ app.jobTitle || 'Untitled' }}</div>
+            @if (app.company) {
+              <div class="board-card-company">{{ app.company }}</div>
+            }
+            <div class="board-card-meta">
+              @if (app.location) {
+                <span class="board-card-location">{{ app.location }}</span>
+              }
+              @if (app.applicationDate) {
+                <span class="board-card-date">{{ formatDate(app.applicationDate) }}</span>
+              }
+            </div>
+
+            <div class="board-card-actions">
+              <button type="button" class="board-card-action" (click)="edit.emit(app)" title="Edit">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20h9" />
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                </svg>
+              </button>
+              @if (app.status === 'Pending') {
+                <button type="button" class="board-card-action" (click)="coverLetter.emit(app)" title="Generate cover letter">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                    <path d="M3 7l9 6 9-6" />
+                  </svg>
+                </button>
+              }
+              <button type="button" class="board-card-action" (click)="prepAnswers.emit(app)" title="Prep interview answers">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+              </button>
+              <button type="button" class="board-card-action danger" (click)="onDelete(app)" title="Delete">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                  <path d="M10 11v6" />
+                  <path d="M14 11v6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        } @empty {
+          <div class="board-column-empty">No jobs here</div>
+        }
+      </div>
+    </div>
+  }
+</div>

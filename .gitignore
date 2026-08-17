@@ -1,0 +1,12 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# dashboard/ and tests/ each have their own .gitignore for node_modules,
+# dist/, .angular/, test-results/, etc. — nothing extension-specific to
+# ignore at the repo root beyond OS/editor junk.

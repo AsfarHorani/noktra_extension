@@ -1,0 +1,13 @@
+{
+  "name": "job-tracker-detection-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright tests loading the real unpacked extension against saved job-site HTML fixtures.",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
+  }
+}

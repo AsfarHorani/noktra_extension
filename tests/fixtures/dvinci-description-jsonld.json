@@ -1,0 +1,8 @@
+{
+  "url": "https://budenheim.dvinci-hr.com/de/jobs/50597/industriemechaniker-instandhaltung-mwd-chemieindustrie",
+  "category": "positive-jsonld",
+  "note": "This d.vinci tenant (Budenheim) ships real JobPosting JSON-LD on the description page, which extractJobPosting() catches before extractDvinciFallback() ever runs — a real finding: CLAUDE.md's d.vinci section documents essilorluxottica.dvinci-hr.com as shipping none, so JSON-LD support may vary per tenant/have been added since that investigation. The /intro step (dvinci-intro fixture) has no JSON-LD, so that one still exercises the actual dvinci fallback path.",
+  "expectDetected": true,
+  "expectedJobTitle": "Industriemechaniker Instandhaltung",
+  "expectedCompany": "Chemische Fabrik Budenheim"
+}

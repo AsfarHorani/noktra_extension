@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Job Tracker</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <!--
+      Shown instead of everything below until a valid auth token is stored
+      (see storage.js's getAuthToken / popup.js's checkAuth) — every tracked
+      application now lives on the Django server behind a real account, so
+      there's nothing to show until the user is logged in. A real choice
+      between the two, not an immediate redirect: logging in with an
+      existing account happens right here (#login-form), since typing an
+      email/password you already have shouldn't require leaving the popup.
+      Signing up still always goes to the Dashboard — account creation has
+      more steps than the popup's 340px really fits, and keeping it in one
+      place avoided duplicating that whole form for no benefit.
+    -->
+    <section id="auth-gate" class="hidden">
+      <h1>Job Tracker</h1>
+      <p class="hint">Log in or sign up to start tracking and analyzing job applications. Requires the local server running at <code>localhost:8000</code>.</p>
+
+      <div id="auth-choice">
+        <button type="button" id="show-login-form-button">Log In</button>
+        <button type="button" id="open-dashboard-auth-button" class="secondary">Sign Up ↗</button>
+      </div>
+
+      <form id="login-form" class="hidden">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" required autocomplete="username" />
+
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" required autocomplete="current-password" />
+
+        <p id="login-error" class="error-message hidden"></p>
+
+        <div class="form-actions">
+          <button type="submit" id="login-submit">Log In</button>
+          <button type="button" id="cancel-login" class="secondary">Back</button>
+        </div>
+      </form>
+    </section>
+
+    <div id="app-shell" class="hidden">
+    <header class="app-header">
+      <div class="app-header-top">
+        <h1>Job Tracker</h1>
+        <div class="app-header-actions">
+          <button id="open-dashboard-button" title="Open the full dashboard in a new tab">Dashboard ↗</button>
+          <button id="logout-button" title="Log out">Log Out</button>
+        </div>
+      </div>
+      <nav class="tabs">
+        <button class="tab-button active" data-tab="list">Applications</button>
+        <button class="tab-button" data-tab="add">Add Manually</button>
+        <button class="tab-button" data-tab="insights">Insights</button>
+      </nav>
+      <label class="auto-detect-setting">
+        <input type="checkbox" id="auto-detect-toggle" checked />
+        Auto-detect jobs on pages
+      </label>
+      <p class="hint auto-detect-hint hidden" id="auto-detect-hint">Off — no automatic prompts. Open this popup on a job page and it'll grab whatever it can find for you to review.</p>
+    </header>
+
+    <!--
+      Every element id here is read directly by popup.js
+      (document.getElementById(...)) — renaming an id means updating popup.js
+      too, there's no other layer of indirection.
+    -->
+    <main>
+      <!-- Tab 1: the dashboard — list of tracked applications, filterable by status. -->
+      <section id="tab-list" class="tab-panel active">
+        <p class="hint">Jobs are detected as you browse career sites, but only tracked here once you click Save or Apply on the page's prompt. Use this list to review, correct, or remove them.</p>
+        <div class="list-toolbar">
+          <select id="status-filter">
+            <option value="">All statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Applied">Applied</option>
+            <option value="Interview">Interview</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Withdrawn">Withdrawn</option>
+            <option value="Ghosted">Ghosted</option>
+            <option value="Ignored">Ignored</option>
+          </select>
+        </div>
+        <div id="applications-list"></div>
+        <p id="empty-state" class="empty-state hidden">No applications tracked yet. Visit a job posting page to get started, or add one manually.</p>
+      </section>
+
+      <!-- Tab 2: manual-entry fallback form, also reused (via startEdit in popup.js) for editing an existing record. -->
+      <section id="tab-add" class="tab-panel">
+        <p class="hint">Use this for applications the auto-detector missed (e.g. applied via email, or a site without job data).</p>
+        <form id="application-form">
+          <input type="hidden" id="application-id" />
+
+          <label for="jobTitle">Job Title *</label>
+          <input type="text" id="jobTitle" required />
+
+          <label for="company">Company *</label>
+          <input type="text" id="company" required />
+
+          <label for="location">Location</label>
+          <input type="text" id="location" />
+
+          <label for="jobUrl">Job URL</label>
+          <input type="url" id="jobUrl" placeholder="https://..." />
+
+          <label for="employmentType">Employment Type</label>
+          <select id="employmentType">
+            <option value="">—</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Contract">Contract</option>
+            <option value="Internship">Internship</option>
+          </select>
+
+          <label for="status">Status</label>
+          <select id="status">
+            <option value="Pending">Pending</option>
+            <option value="Applied" selected>Applied</option>
+            <option value="Interview">Interview</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Withdrawn">Withdrawn</option>
+            <option value="Ghosted">Ghosted</option>
+            <option value="Ignored">Ignored</option>
+          </select>
+
+          <label for="applicationDate">Application Date</label>
+          <input type="date" id="applicationDate" />
+
+          <label for="notes">Notes</label>
+          <textarea id="notes" rows="3"></textarea>
+
+          <div class="form-actions">
+            <button type="submit" id="submit-button">Save Application</button>
+            <button type="button" id="cancel-edit" class="secondary hidden">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Tab 3 (Phase 2): sends all tracked applications to the local
+           Django/Ollama server and renders the returned insights. Hidden
+           until the user clicks Analyze — see the analyzeButton handler in
+           popup.js for the actual request. -->
+      <section id="tab-insights" class="tab-panel">
+        <p class="hint">Compares jobs that led to an interview or offer against ones that were rejected or ghosted, using a local open-source LLM (Ollama). Requires the analysis server running at <code>localhost:8000</code> and Ollama running at <code>localhost:11434</code>.</p>
+        <button id="analyze-button">Analyze My Applications</button>
+        <p id="insights-status" class="hint hidden"></p>
+        <div id="insights-results" class="hidden">
+          <p id="insights-summary" class="insights-summary"></p>
+          <div class="insights-section">
+            <h3>Interview Patterns</h3>
+            <ul id="insights-interview-patterns"></ul>
+          </div>
+          <div class="insights-section">
+            <h3>Rejection Patterns</h3>
+            <ul id="insights-rejection-patterns"></ul>
+          </div>
+          <div class="insights-section">
+            <h3>Recommendations</h3>
+            <ul id="insights-recommendations"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+    </div>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

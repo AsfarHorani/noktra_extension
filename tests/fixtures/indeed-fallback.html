@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Software Engineer - job post | Indeed.com</title></head>
+<body>
+  <!--
+    Minimal, hand-built fixture — NOT a full page capture. Indeed's bot
+    detection blocks automated (headless) fetches of the real page (returns
+    a Cloudflare challenge, confirmed while building this test suite), and
+    the real DOM is 1.6MB+, too large to pull through an interactive-browser
+    capture either. The data-testid selectors and text values below are
+    real and confirmed live on indeed.com/viewjob (checked interactively
+    while building this fixture) — this tests extractIndeedFallback()'s
+    actual selectors against real values, just without the surrounding page
+    chrome that doesn't matter to the extraction logic.
+  -->
+  <div data-testid="jobsearch-JobInfoHeader-title">Software Engineer - job post</div>
+  <div data-testid="inlineHeader-companyName">Decilog Inc.</div>
+  <div data-testid="inlineHeader-companyLocation">Melville, NY 11747&bull;Hybrid work</div>
+  <!--
+    Added after a real user-reported bug: extractIndeedFallback() never read
+    this element at all, so jobDescription stayed permanently empty for
+    every Indeed-sourced record, silently degrading cover-letter generation.
+    #jobDescriptionText is the real, live-confirmed id Indeed renders the
+    full posting text under (checked interactively on a real job page while
+    fixing this) — see CLAUDE.md's Assistant section.
+  -->
+  <div id="jobDescriptionText">You will be responsible for designing and maintaining backend services in a small, cross-functional team.</div>
+</body>
+</html>

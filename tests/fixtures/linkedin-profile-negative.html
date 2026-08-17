@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Alex Sample | LinkedIn</title></head>
+<body>
+  <!--
+    Minimal synthetic stub (no real person's data — this only needs to
+    exercise the /jobs/ pathname gate in detectJob(), which is checked
+    before any fallback runs, regardless of page content). The exact
+    documented bug: a "{Name} | LinkedIn" title has one " | " and matched
+    GENERIC_TITLE_SEPARATORS before detectJob() started gating on
+    location.pathname.startsWith("/jobs/") for linkedin.* hosts.
+  -->
+  <h1>Alex Sample</h1>
+</body>
+</html>

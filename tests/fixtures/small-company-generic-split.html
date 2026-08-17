@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Backend Developer | Acme Robotics Careers</title></head>
+<body>
+  <!--
+    Hand-built, not a real-site capture — deliberately fills a gap the real
+    captures left: both greenhouse-anthropic-generic and
+    smartrecruiters-servicenow-generic have an og:title with no separator
+    at all, so neither actually exercises extractGenericFallback()'s
+    title-SPLIT logic (GENERIC_TITLE_SEPARATORS), only the "no split
+    needed" path. This has no og:title, so document.title's " | " split is
+    what runs, and also demonstrates the documented accuracy trade-off
+    (CLAUDE.md: "it has no way to know whether the last segment is
+    actually the employer or just the site's own name") — "Acme Robotics
+    Careers" is the site's own branding, not cleanly just the employer
+    name.
+  -->
+  <h1>Backend Developer</h1>
+  <p>Job Description: Acme Robotics is looking for a Backend Developer to join our team.</p>
+</body>
+</html>

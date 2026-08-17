@@ -1,0 +1,7 @@
+{
+  "url": "https://careers.acme-robotics.example/openings/backend-developer",
+  "category": "positive-generic-fallback",
+  "note": "Hand-built to specifically exercise extractGenericFallback()'s title-SPLIT logic (' | ' separator) via document.title (no og:title present) — see comment in the .html file for why the two real captures didn't end up testing this path.",
+  "expectDetected": true,
+  "expectedJobTitle": "Backend Developer"
+}

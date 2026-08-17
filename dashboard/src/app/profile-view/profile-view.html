@@ -1,0 +1,175 @@
+<div class="profile-view">
+  @if (draft().resumeFileName) {
+    <p class="hint">
+      From: {{ draft().resumeFileName }}
+      @if (draft().resumeText) {
+        — <button type="button" class="link-button" (click)="toggleResumeText()">{{ showResumeText() ? 'hide' : 'view' }} exact extracted text</button>
+      }
+    </p>
+    @if (showResumeText() && draft().resumeText) {
+      <textarea class="field-input resume-text-view" rows="10" readonly>{{ draft().resumeText }}</textarea>
+      <p class="hint">This is the exact text pulled from your uploaded file — everything below is editable on top of it, and generation always uses this full text too, not just the fields below.</p>
+    }
+  }
+
+  <p class="hint">Used to sign and address generated cover letters — see the Jobs page. Left off if blank rather than guessed.</p>
+  <label class="field-label">Full Name</label>
+  <input
+    class="field-input"
+    placeholder="e.g. Jordan Lee"
+    [value]="draft().fullName || ''"
+    (input)="updateFullName($any($event.target).value)"
+  />
+  <div class="entry-grid">
+    <div>
+      <label class="field-label">Email</label>
+      <input
+        class="field-input"
+        placeholder="e.g. jordan@example.com"
+        [value]="draft().email || ''"
+        (input)="updateEmail($any($event.target).value)"
+      />
+    </div>
+    <div>
+      <label class="field-label">Phone</label>
+      <input
+        class="field-input"
+        placeholder="optional"
+        [value]="draft().phone || ''"
+        (input)="updatePhone($any($event.target).value)"
+      />
+    </div>
+  </div>
+
+  <label class="field-label">Summary</label>
+  <textarea
+    class="field-input"
+    rows="2"
+    [value]="draft().summary || ''"
+    (input)="updateSummary($any($event.target).value)"
+  ></textarea>
+
+  <div class="section">
+    <div class="section-header">
+      <h3>Experience</h3>
+      <button type="button" class="add-button" (click)="addExperience()">+ Add</button>
+    </div>
+    @for (entry of draft().experience || []; track $index) {
+      <div class="entry-card">
+        <div class="entry-grid">
+          <input
+            placeholder="Title"
+            [value]="entry.title"
+            (input)="updateExperience($index, 'title', $any($event.target).value)"
+          />
+          <input
+            placeholder="Company"
+            [value]="entry.company"
+            (input)="updateExperience($index, 'company', $any($event.target).value)"
+          />
+          <input
+            placeholder="Start (e.g. 2021)"
+            [value]="entry.startDate || ''"
+            (input)="updateExperience($index, 'startDate', $any($event.target).value)"
+          />
+          <input
+            placeholder="End (e.g. Present)"
+            [value]="entry.endDate || ''"
+            (input)="updateExperience($index, 'endDate', $any($event.target).value)"
+          />
+        </div>
+        <textarea
+          rows="2"
+          placeholder="Description"
+          [value]="entry.description || ''"
+          (input)="updateExperience($index, 'description', $any($event.target).value)"
+        ></textarea>
+        <button type="button" class="remove-button" (click)="removeExperience($index)">Remove</button>
+      </div>
+    }
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h3>Education</h3>
+      <button type="button" class="add-button" (click)="addEducation()">+ Add</button>
+    </div>
+    @for (entry of draft().education || []; track $index) {
+      <div class="entry-card">
+        <div class="entry-grid">
+          <input
+            placeholder="School"
+            [value]="entry.school"
+            (input)="updateEducation($index, 'school', $any($event.target).value)"
+          />
+          <input
+            placeholder="Degree"
+            [value]="entry.degree || ''"
+            (input)="updateEducation($index, 'degree', $any($event.target).value)"
+          />
+          <input
+            placeholder="Field of study"
+            [value]="entry.field || ''"
+            (input)="updateEducation($index, 'field', $any($event.target).value)"
+          />
+          <input
+            placeholder="Year(s)"
+            [value]="entry.endDate || ''"
+            (input)="updateEducation($index, 'endDate', $any($event.target).value)"
+          />
+        </div>
+        <button type="button" class="remove-button" (click)="removeEducation($index)">Remove</button>
+      </div>
+    }
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h3>Projects</h3>
+      <button type="button" class="add-button" (click)="addProject()">+ Add</button>
+    </div>
+    @for (entry of draft().projects || []; track $index) {
+      <div class="entry-card">
+        <input
+          placeholder="Project name"
+          [value]="entry.name"
+          (input)="updateProject($index, 'name', $any($event.target).value)"
+        />
+        <textarea
+          rows="2"
+          placeholder="Description"
+          [value]="entry.description || ''"
+          (input)="updateProject($index, 'description', $any($event.target).value)"
+        ></textarea>
+        <input
+          placeholder="Technologies (comma-separated)"
+          [value]="entry.technologies || ''"
+          (input)="updateProject($index, 'technologies', $any($event.target).value)"
+        />
+        <button type="button" class="remove-button" (click)="removeProject($index)">Remove</button>
+      </div>
+    }
+  </div>
+
+  <label class="field-label">Skills (comma-separated)</label>
+  <input class="field-input" [value]="skillsText()" (input)="updateSkills($any($event.target).value)" />
+
+  <label class="field-label">Languages (comma-separated — e.g. Spanish (fluent))</label>
+  <input class="field-input" [value]="languagesText()" (input)="updateLanguages($any($event.target).value)" />
+
+  <label class="field-label">Certifications (comma-separated)</label>
+  <input class="field-input" [value]="certificationsText()" (input)="updateCertifications($any($event.target).value)" />
+
+  <label class="field-label">Interests / Hobbies (comma-separated)</label>
+  <input class="field-input" [value]="interestsText()" (input)="updateInterests($any($event.target).value)" />
+
+  <div class="form-actions">
+    <button type="button" class="primary-button" (click)="save()">Save Profile</button>
+    @if (savedMessage()) {
+      <span class="saved-message">{{ savedMessage() }}</span>
+    }
+    @if (draft().resumeFileName) {
+      <button type="button" class="danger-link" (click)="clearProfile()">Remove profile</button>
+    }
+  </div>
+</div>

@@ -1,0 +1,6 @@
+{
+  "url": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+  "category": "negative-non-job-host-regression",
+  "note": "The exact site that motivated adding NON_JOB_HOSTS entries beyond the original meeting-tool list — see CLAUDE.md.",
+  "expectDetected": false
+}

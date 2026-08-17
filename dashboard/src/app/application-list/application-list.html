@@ -1,0 +1,62 @@
+<table class="app-table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Company</th>
+      <th>Location</th>
+      <th>Status</th>
+      <th>Applied</th>
+      <th>Notes</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (app of applications(); track app.id) {
+      <tr [style.--row-color]="statusColor(app.status)">
+        <td class="title-cell">
+          {{ app.jobTitle || 'Untitled' }}
+          @if (app.jobUrl) {
+            <a [href]="app.jobUrl" target="_blank" rel="noopener" class="posting-link">View posting</a>
+          }
+        </td>
+        <td>{{ app.company }}</td>
+        <td>{{ app.location }}</td>
+        <td>
+          <!--
+            [selected] on each option, not [value] on the <select> itself —
+            confirmed live as a real, pre-existing bug (found while visually
+            verifying this redesign): a plain property binding on a native
+            <select> outside Angular's forms module (no ngModel/formControl
+            here) doesn't reliably re-select the matching <option> once the
+            row's data arrives asynchronously — every dropdown silently
+            showed "Pending" regardless of the record's actual status, even
+            though app.status itself was correct (the colored border/select
+            background, driven by the same app.status via statusColor(),
+            rendered correctly the whole time). Binding [selected] per-option
+            directly is the standard, reliable fix for this outside the
+            forms module.
+          -->
+          <select class="status-select" [style.--row-color]="statusColor(app.status)" (change)="onStatusChange(app.id, $event)">
+            @for (s of statuses; track s) {
+              <option [value]="s" [selected]="s === app.status">{{ s }}</option>
+            }
+          </select>
+        </td>
+        <td class="date-cell">{{ formatDate(app.applicationDate) }}</td>
+        <td class="notes-cell">{{ app.notes }}</td>
+        <td class="actions-cell">
+          <button class="icon-button" (click)="edit.emit(app)">Edit</button>
+          @if (app.status === 'Pending') {
+            <button class="icon-button cover-letter-button" (click)="coverLetter.emit(app)">✎ Generate Cover Letter</button>
+          }
+          <button class="icon-button" (click)="prepAnswers.emit(app)">Prep Answers</button>
+          <button class="icon-button danger" (click)="onDelete(app)">Delete</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="7" class="empty-state">No applications tracked yet.</td>
+      </tr>
+    }
+  </tbody>
+</table>

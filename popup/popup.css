@@ -1,0 +1,558 @@
+/* Popup shell: fixed-width chrome extension popup, header + tab strip + a
+   scrollable main area. Section order below roughly follows popup.html:
+   layout/tabs, the manual-entry form, the applications list/cards
+   (including per-status badge colors), then the Insights tab. */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 340px;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  color: #1a1a1a;
+  background: #fff;
+}
+
+.app-header {
+  padding: 10px 12px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.app-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.app-header h1 {
+  font-size: 15px;
+  margin: 0;
+}
+
+.app-header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+#open-dashboard-button,
+#logout-button {
+  padding: 4px 8px;
+  background: none;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #444;
+}
+
+#open-dashboard-button:hover,
+#logout-button:hover {
+  background: #f0f0f0;
+}
+
+/* Auth gate — shown instead of the whole app-shell until a valid auth token
+   is stored, see popup.js's checkAuth(). #auth-choice offers a real choice
+   (Log In right here vs. Sign Up in the Dashboard); #login-form is the
+   actual email/password form, hidden until "Log In" is clicked. */
+#auth-gate {
+  width: 340px;
+  box-sizing: border-box;
+  padding: 16px 12px;
+}
+
+#auth-gate h1 {
+  font-size: 15px;
+  margin: 0 0 8px;
+}
+
+#auth-choice {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+#show-login-form-button,
+#login-submit {
+  flex: 1;
+  padding: 8px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+#show-login-form-button:hover,
+#login-submit:hover {
+  background: #1d4ed8;
+}
+
+#auth-choice .secondary {
+  flex: 1;
+}
+
+#login-form {
+  margin-top: 4px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 6px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: #666;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-button.active {
+  color: #1a1a1a;
+  border-bottom-color: #2563eb;
+  font-weight: 600;
+}
+
+.auto-detect-setting {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+  font-size: 11px;
+  color: #444;
+  cursor: pointer;
+}
+
+.auto-detect-hint {
+  margin-top: 4px;
+}
+
+main {
+  padding: 12px;
+  max-height: 460px;
+  overflow-y: auto;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* Manual-entry form (Add Manually tab, also reused for editing). */
+form label {
+  display: block;
+  margin-top: 8px;
+  margin-bottom: 2px;
+  font-size: 11px;
+  color: #444;
+}
+
+form input,
+form select,
+form textarea {
+  width: 100%;
+  padding: 5px 6px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.form-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  cursor: pointer;
+}
+
+#submit-button {
+  flex: 1;
+  padding: 7px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.secondary {
+  padding: 7px 10px;
+  background: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.error-message {
+  color: #d03b3b;
+  font-size: 11px;
+  margin: 6px 0 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.hint {
+  color: #666;
+  font-size: 11px;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.list-toolbar {
+  margin-bottom: 8px;
+}
+
+.list-toolbar select {
+  width: 100%;
+  padding: 5px 6px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* Applications list — one .app-card per tracked record (see renderCard() in popup.js). */
+.app-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+.app-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 6px;
+}
+
+.app-card-title {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.app-card-company {
+  color: #555;
+  font-size: 12px;
+}
+
+.status-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* One color per value in shared/constants.js STATUSES — class name is
+   built as `status-${app.status}` in renderCard(), so a new status added
+   there needs a matching rule here or it just falls back to .status-badge's
+   plain gray. */
+.status-Pending { background: #f3f4f6; color: #4b5563; }
+.status-Applied { background: #dbeafe; color: #1e40af; }
+.status-Interview { background: #fef3c7; color: #92400e; }
+.status-Offer { background: #dcfce7; color: #166534; }
+.status-Rejected { background: #fee2e2; color: #991b1b; }
+.status-Withdrawn { background: #f3f4f6; color: #4b5563; }
+.status-Ghosted { background: #ede9fe; color: #5b21b6; }
+.status-Ignored { background: #f3f4f6; color: #9ca3af; }
+
+.app-card-meta {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
+.app-card-notes {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #444;
+  white-space: pre-wrap;
+}
+
+.app-card-actions {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.app-card-actions select {
+  flex: 1;
+  padding: 3px 4px;
+  font-size: 11px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+}
+
+.icon-button {
+  border: none;
+  background: none;
+  font-size: 12px;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.icon-button:hover {
+  background: #f0f0f0;
+}
+
+.icon-button.danger:hover {
+  background: #fee2e2;
+}
+
+/* Only shown on Pending cards — mirrors the dashboard's highlighted
+   Generate Cover Letter row action (same reasoning: most worth nudging the
+   user toward before they've applied). */
+.cover-letter-button {
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+}
+
+.cover-letter-button:hover {
+  background: #1d4ed8;
+}
+
+/* Quick-generate panel, toggled open under a card by toggleCoverLetterPanel()
+   in popup.js. Kept compact for the popup's fixed 340px width. */
+.cover-letter-panel {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #e5e5e5;
+}
+
+.cover-letter-saved-hint {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+.cover-letter-notes {
+  width: 100%;
+  padding: 5px 6px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.cover-letter-generate {
+  width: 100%;
+  margin-top: 6px;
+  padding: 6px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cover-letter-generate:disabled {
+  background: #93b4f0;
+  cursor: default;
+}
+
+.cover-letter-error {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: #991b1b;
+}
+
+.cover-letter-result {
+  width: 100%;
+  margin-top: 6px;
+  padding: 6px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: inherit;
+  resize: vertical;
+  background: #fafafa;
+}
+
+.cover-letter-result-actions {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+}
+
+.cover-letter-result-actions button {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 11px;
+}
+
+.cover-letter-result-actions button:hover {
+  background: #f0f0f0;
+}
+
+.cover-letter-result-actions button:disabled {
+  color: #b3b1ab;
+  cursor: default;
+  background: #fafafa;
+}
+
+.cover-letter-empty-profile {
+  margin: 0 0 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #52514e;
+}
+
+.cover-letter-jd-gate-message {
+  margin: 0 0 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #52514e;
+}
+
+.cover-letter-jd-input {
+  width: 100%;
+  padding: 5px 6px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.cover-letter-jd-save {
+  width: 100%;
+  margin-top: 6px;
+  padding: 6px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cover-letter-jd-save:disabled {
+  background: #93b4f0;
+  cursor: default;
+}
+
+.cover-letter-open-dashboard {
+  width: 100%;
+  padding: 6px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cover-letter-open-dashboard:hover {
+  background: #1d4ed8;
+}
+
+/* Status-warning tone — same role as the dashboard's .ai-warning, a real
+   "pay attention before acting" signal, not decoration. */
+.cover-letter-ai-warning {
+  margin: 6px 0 0;
+  padding: 6px 7px;
+  background: #fdf3e0;
+  border: 1px solid #f0d99a;
+  border-radius: 4px;
+  color: #8a5a00;
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+
+.cover-letter-review {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #33322f;
+  cursor: pointer;
+}
+
+.empty-state {
+  text-align: center;
+  color: #888;
+  margin-top: 24px;
+}
+
+/* Insights tab (Phase 2) — Analyze button plus the summary/pattern-list
+   layout rendered by renderInsightsList() in popup.js. */
+#analyze-button {
+  width: 100%;
+  padding: 7px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+#analyze-button:disabled {
+  background: #93b4f0;
+  cursor: default;
+}
+
+.insights-summary {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.insights-section {
+  margin-top: 10px;
+}
+
+.insights-section h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #666;
+  margin: 0 0 4px;
+}
+
+.insights-section ul {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 12px;
+  color: #333;
+}
+
+.insights-section li {
+  margin-bottom: 4px;
+}
+
+.insights-section li.empty {
+  color: #888;
+}

@@ -1,0 +1,16 @@
+<input
+  #fileInput
+  type="file"
+  accept=".pdf,.docx"
+  class="hidden-file-input"
+  (change)="onFileSelected($event)"
+/>
+<button type="button" [disabled]="busy()" (click)="triggerFilePicker()">
+  {{ busy() ? 'Working…' : 'Upload Resume (.pdf or .docx)' }}
+</button>
+@if (statusMessage()) {
+  <p class="status-message">{{ statusMessage() }}</p>
+}
+@if (error()) {
+  <p class="error-message">{{ error() }}</p>
+}

@@ -1,0 +1,24 @@
+<div class="viz-root">
+  <div class="hero">
+    <div class="hero-value">{{ total() }}</div>
+    <div class="hero-label">applications tracked</div>
+  </div>
+
+  <div class="rows" role="list">
+    @for (row of rows(); track row.status) {
+      <div
+        class="row"
+        role="listitem"
+        tabindex="0"
+        [title]="row.status + ': ' + row.count + ' of ' + total()"
+      >
+        <span class="swatch" [style.background]="row.color" aria-hidden="true"></span>
+        <span class="label">{{ row.status }}</span>
+        <span class="track">
+          <span class="fill" [style.width.%]="row.widthPct" [style.background]="row.color"></span>
+        </span>
+        <span class="count">{{ row.count }}</span>
+      </div>
+    }
+  </div>
+</div>

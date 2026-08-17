@@ -1,0 +1,90 @@
+/* Tokens from the dataviz skill's reference palette (references/palette.md) —
+   light mode only, matching this project's existing popup.css (no dark-mode
+   support anywhere else in the extension yet). */
+.viz-root {
+  --surface-1: #fcfcfb;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --muted: #898781;
+  --gridline: #e1e0d9;
+
+  background: var(--surface-1);
+  border: 1px solid var(--gridline);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.hero {
+  margin-bottom: 20px;
+}
+
+.hero-value {
+  font-size: 40px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1;
+  font-variant-numeric: proportional-nums;
+}
+
+.hero-label {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* the skill's "surface gap" between touching marks */
+}
+
+.row {
+  display: grid;
+  grid-template-columns: auto 90px 1fr 40px;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 6px;
+  border-radius: 6px;
+}
+
+.row:hover,
+.row:focus-visible {
+  background: var(--gridline);
+  outline: none;
+}
+
+.swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--text-secondary); /* text never wears the data color — identity comes from the swatch */
+  white-space: nowrap;
+}
+
+.track {
+  position: relative;
+  height: 16px; /* bar thickness, well under the 24px cap */
+  background: var(--gridline);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 0 4px 4px 0; /* rounded data-end, square at the baseline (left) */
+  transition: width 0.2s ease;
+}
+
+.count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: right;
+  font-variant-numeric: tabular-nums; /* a column of numbers that must align */
+}

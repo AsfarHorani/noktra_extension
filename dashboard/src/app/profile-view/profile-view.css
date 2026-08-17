@@ -1,0 +1,128 @@
+.profile-view {
+  font-size: 13px;
+}
+
+.hint {
+  color: #898781;
+  font-size: 12px;
+  margin: 0 0 10px;
+}
+
+.field-label {
+  display: block;
+  font-size: 12px;
+  color: #52514e;
+  margin: 10px 0 4px;
+}
+
+.field-input,
+input,
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  margin-bottom: 6px;
+}
+
+.section {
+  margin-top: 16px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header h3 {
+  font-size: 13px;
+  margin: 0;
+}
+
+.add-button {
+  border: 1px solid #2a78d6;
+  background: none;
+  color: #2a78d6;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.entry-card {
+  border: 1px solid #e1e0d9;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 8px;
+}
+
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.remove-button {
+  border: none;
+  background: none;
+  color: #d03b3b;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.form-actions {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.primary-button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #2a78d6;
+  color: #fff;
+}
+
+.saved-message {
+  color: #0ca30c;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.danger-link {
+  margin-left: auto;
+  border: none;
+  background: none;
+  color: #d03b3b;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.link-button {
+  border: none;
+  background: none;
+  color: #2a78d6;
+  font-size: 12px;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.resume-text-view {
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  color: #52514e;
+  background: #fcfcfb;
+  white-space: pre-wrap;
+  resize: vertical;
+}

@@ -1,0 +1,129 @@
+.app-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+  background: #fff;
+  border: 1px solid #ece9f7;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(35, 20, 90, 0.05);
+}
+
+.app-table th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #8b86a3;
+  font-weight: 700;
+  padding: 10px 12px;
+  border-bottom: 1px solid #ece9f7;
+  background: #faf9fe;
+}
+
+.app-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f2f0fa;
+  vertical-align: top;
+}
+
+.app-table tr {
+  border-left: 3px solid var(--row-color, transparent);
+  transition: background 0.1s ease;
+}
+
+.app-table tbody tr:hover {
+  background: #faf8ff;
+}
+
+.app-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.title-cell {
+  font-weight: 700;
+  color: #1c1630;
+}
+
+.posting-link {
+  display: block;
+  font-weight: 400;
+  font-size: 12px;
+  color: #7c3aed;
+  margin-top: 2px;
+}
+
+.notes-cell {
+  max-width: 260px;
+  color: #5f5a78;
+  white-space: pre-wrap;
+}
+
+.date-cell {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: #5f5a78;
+}
+
+select {
+  padding: 4px 6px;
+  border: 1px solid #d9d5ee;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.status-select {
+  font-weight: 700;
+  color: var(--row-color, #5f5a78);
+  border-color: color-mix(in srgb, var(--row-color, #5f5a78) 40%, #fff);
+  background: color-mix(in srgb, var(--row-color, #5f5a78) 10%, #fff);
+}
+
+.actions-cell {
+  white-space: nowrap;
+}
+
+.icon-button {
+  border: none;
+  background: none;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #5f5a78;
+}
+
+.icon-button:hover {
+  background: #f1ecfd;
+  color: #6d28d9;
+}
+
+.icon-button.danger:hover {
+  background: #fbe3ec;
+  color: #d0316b;
+}
+
+/* Only shown for status: Pending — a cover letter matters before you've
+   applied, not after, so this is deliberately more visually prominent than
+   the plain Edit/Prep Answers/Delete row actions: a filled accent button
+   rather than a text-style one, nudging the user toward the actionable
+   next step for exactly the applications where it's still relevant. */
+.cover-letter-button {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: #fff;
+  font-weight: 700;
+  padding: 5px 10px;
+  box-shadow: 0 2px 6px rgba(109, 40, 217, 0.28);
+}
+
+.cover-letter-button:hover {
+  filter: brightness(1.06);
+}
+
+.empty-state {
+  text-align: center;
+  color: #8b86a3;
+  padding: 24px;
+}

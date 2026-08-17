@@ -1,0 +1,7 @@
+{
+  "url": "https://jobs.smartrecruiters.com/ServiceNow/744000142948259-staff-software-engineer",
+  "category": "positive-generic-fallback",
+  "note": "No JobPosting JSON-LD. <title> 'ServiceNow Staff Software Engineer | SmartRecruiters' would exercise the ' | ' separator split, but extractGenericFallback() prefers og:title, which this page sets to a clean 'Staff Software Engineer' with no separator — confirmed by running this fixture. Same 'og:title wins, no split needed' path as greenhouse-anthropic-generic.",
+  "expectDetected": true,
+  "expectedJobTitle": "Staff Software Engineer"
+}

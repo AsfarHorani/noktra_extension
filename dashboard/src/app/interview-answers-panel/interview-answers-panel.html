@@ -1,0 +1,41 @@
+<div class="panel">
+  <div class="panel-header">
+    <h3>Interview Prep — {{ application().jobTitle }} at {{ application().company }}</h3>
+    <button type="button" class="close-button" (click)="close.emit()">&times;</button>
+  </div>
+
+  @if (!profile()) {
+    <p class="hint">No profile yet — upload a resume above for answers grounded in your real experience.</p>
+  }
+
+  @if (jobDescriptionMissing()) {
+    <app-job-description-gate [applicationId]="application().id" (saved)="onDescriptionSaved($event)" />
+  } @else {
+    <div class="preset-buttons">
+      @for (q of presetQuestions; track q) {
+        <button type="button" [disabled]="busy()" (click)="askPreset(q)">{{ q }}</button>
+      }
+    </div>
+
+    <div class="custom-question">
+      <input #customQuestionInput type="text" placeholder="Or type your own question…" />
+      <button type="button" [disabled]="busy()" (click)="askCustom()">Ask</button>
+    </div>
+
+    @if (busy()) {
+      <p class="hint">Generating…</p>
+    }
+
+    @if (error()) {
+      <p class="error-message">{{ error() }}</p>
+    }
+
+    @if (result()) {
+      <div class="result-block">
+        <div class="asked-question">{{ askedQuestion() }}</div>
+        <textarea class="result" rows="8" readonly>{{ result() }}</textarea>
+        <button type="button" (click)="copy()">{{ copied() ? 'Copied ✓' : 'Copy' }}</button>
+      </div>
+    }
+  }
+</div>

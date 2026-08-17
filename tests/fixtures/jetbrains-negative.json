@@ -1,0 +1,6 @@
+{
+  "url": "https://www.jetbrains.com/pycharm/download/",
+  "category": "negative-generic-no-match",
+  "note": "Not in NON_JOB_HOSTS — passes naturally because its title contains no GENERIC_TITLE_SEPARATORS match. Confirmed live earlier this session as part of investigating a user report; kept as a regression guard for that investigation.",
+  "expectDetected": false
+}
