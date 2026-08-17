@@ -1,10 +1,10 @@
 # Job Tracker — Extension
 
-Chrome extension (Manifest V3) + Angular dashboard for the Job Tracker project. See [README.md](README.md) for setup/usage. See [HISTORY.md](HISTORY.md) for the full decision log this repo was split from (predates the split — also covers the Django backend, which now lives in the companion `job-tracker-server` repo).
+Chrome extension (Manifest V3) + Angular dashboard for the Job Tracker project. See [README.md](README.md) for setup/usage. See [HISTORY.md](HISTORY.md) for the full decision log this repo was split from (predates the split — also covers the Django backend, which now lives in the companion [noktra_server](https://github.com/AsfarHorani/noktra_server) repo).
 
 ## What this is
 
-A browser extension that detects job postings on pages you visit, tracks applications, and provides AI-assisted cover letter / interview prep generation. All application/profile data and AI generation is handled by the companion `job-tracker-server` Django API — this repo has no server-side logic of its own beyond `background.js` (a thin relay, see below).
+A browser extension that detects job postings on pages you visit, tracks applications, and provides AI-assisted cover letter / interview prep generation. All application/profile data and AI generation is handled by the companion [noktra_server](https://github.com/AsfarHorani/noktra_server) Django API — this repo has no server-side logic of its own beyond `background.js` (a thin relay, see below).
 
 ## Architecture conventions
 

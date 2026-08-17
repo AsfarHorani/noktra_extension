@@ -2,7 +2,7 @@
 
 A Chrome extension that automatically detects job postings as you browse, tracks your applications, and uses a locally-run AI model to generate tailored cover letters, interview prep answers, and job-search insights.
 
-This repo is the client half of a two-repo project. The Django API it talks to lives in a companion repo: **[job-tracker-server](../job-tracker-server)** — you'll need it running for anything in this extension to work.
+This repo is the client half of a two-repo project. The Django API it talks to lives in a companion repo: **[noktra_server](https://github.com/AsfarHorani/noktra_server)** — you'll need it running for anything in this extension to work.
 
 ## Features
 
@@ -32,7 +32,7 @@ tests/            Playwright suite — loads the real unpacked extension against
 
 - Google Chrome (or another Chromium-based browser — untested but should work unmodified)
 - Node.js 20+ (for building the dashboard and running tests)
-- The [job-tracker-server](../job-tracker-server) API running locally, with [Ollama](https://ollama.com) available for the AI features
+- The [noktra_server](https://github.com/AsfarHorani/noktra_server) API running locally, with [Ollama](https://ollama.com) available for the AI features
 
 ### Build the dashboard
 
@@ -49,7 +49,7 @@ This has to be re-run after any change under `dashboard/src/**` — Chrome loads
 1. Open `chrome://extensions`
 2. Enable **Developer mode** (top right)
 3. Click **Load unpacked** and select this repo's root directory
-4. Make sure [job-tracker-server](../job-tracker-server) is running (`python manage.py runserver 8000`), then click the extension icon and sign up
+4. Make sure [noktra_server](https://github.com/AsfarHorani/noktra_server) is running (`python manage.py runserver 8000`), then click the extension icon and sign up
 
 ### Development loop
 
